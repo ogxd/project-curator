@@ -24,10 +24,10 @@ public class DependencyInfoPopup : PopupWindowContent {
 
         GUILayout.Label($"Referencers ({dependencyInfo.referencers.Count})", EditorStyles.boldLabel);
         if (dependencyInfo.referencers.Count > 0)
-            GUILayout.Label(string.Join("\n", dependencyInfo.referencers.Select(x => x.item.name)));
+            GUILayout.Label(string.Join("\n", dependencyInfo.referencers.Select(x => x.path)));
 
         GUILayout.Label($"Dependencies ({dependencyInfo.dependencies.Count})", EditorStyles.boldLabel);
         if (dependencyInfo.dependencies.Count > 0)
-            GUILayout.Label(string.Join("\n", dependencyInfo.dependencies.Select(x => x.item.name)));
+            GUILayout.Label(string.Join("\n", dependencyInfo.dependencies.Select(x => x.path)));
     }
 }

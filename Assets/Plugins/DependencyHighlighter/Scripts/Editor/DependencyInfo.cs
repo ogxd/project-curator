@@ -15,9 +15,8 @@ public static partial class DependencyInfoHighlighter
 {
     public class DependencyInfo {
 
-        public string Path => AssetDatabase.GetAssetPath(item);
-        public string Guid => AssetDatabase.AssetPathToGUID(Path);
-        public UnityObject item;
+        public string path;
+        public string Guid => AssetDatabase.AssetPathToGUID(path);
         public List<DependencyInfo> dependencies = new List<DependencyInfo>();
         public List<DependencyInfo> referencers = new List<DependencyInfo>();
 
@@ -34,7 +33,7 @@ public static partial class DependencyInfoHighlighter
 
                     bool isInEditor = false;
 
-                    string[] directories = Path.ToLower().Split('/');
+                    string[] directories = path.ToLower().Split('/');
                     for (int i = 0; i < directories.Length - 1; i++) {
                         switch (directories[i]) {
                             case "editor":
@@ -50,7 +49,7 @@ public static partial class DependencyInfoHighlighter
                         }
                     }
 
-                    string extension = System.IO.Path.GetExtension(Path);
+                    string extension = System.IO.Path.GetExtension(path);
                     switch (extension) {
                         case ".cs":
                             if (isInEditor) {
@@ -76,26 +75,21 @@ public static partial class DependencyInfoHighlighter
             }
         }
 
-        public DependencyInfo(UnityObject item) {
-            this.item = item;
+        public DependencyInfo(string path) {
 
-            if (!item || item == null || itemToNode.ContainsKey(item)) {
+            this.path = path;
+
+            string guid = Guid;
+            if (!string.IsNullOrEmpty(guid) && !guidToNode.ContainsKey(guid)) {
+                guidToNode.Add(guid, this);
+            } else {
                 return;
             }
 
-            itemToNode.Add(item, this);
-
-            string guid = Guid;
-            if (!string.IsNullOrEmpty(guid)) {
-                if (!guidToNode.ContainsKey(guid)) {
-                    guidToNode.Add(guid, this);
-                }
-            }
-
-            var deps = EditorUtility.CollectDependencies(new[] { item });
+            var deps = AssetDatabase.GetDependencies(path);
             for (int i = 0; i < deps.Length; i++) {
                 DependencyInfo node;
-                if (!itemToNode.TryGetValue(deps[i], out node)) {
+                if (!guidToNode.TryGetValue(deps[i], out node)) {
                     node = new DependencyInfo(deps[i]);
                 }
                 if (node != this) {

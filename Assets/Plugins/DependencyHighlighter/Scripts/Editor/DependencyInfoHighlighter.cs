@@ -10,7 +10,6 @@ using UnityObject = UnityEngine.Object;
 [InitializeOnLoad]
 public static partial class DependencyInfoHighlighter
 {
-    private static Dictionary<object, DependencyInfo> itemToNode = new Dictionary<object, DependencyInfo>();
     private static Dictionary<string, DependencyInfo> guidToNode = new Dictionary<string, DependencyInfo>();
 
     private static HashSet<string> sceneGuids;
@@ -40,7 +39,6 @@ public static partial class DependencyInfoHighlighter
 
         Profiling.Start("CheckDependencies");
 
-        itemToNode.Clear();
         guidToNode.Clear();
 
         // Add info for each object in scene included in build
@@ -48,7 +46,7 @@ public static partial class DependencyInfoHighlighter
         sceneGuids = new HashSet<string>(scenePaths.Select(x => AssetDatabase.AssetPathToGUID(x)));
         string[] dependencies = AssetDatabase.GetDependencies(scenePaths, true);
         for (int i = 0; i < dependencies.Length; i++) {
-            new DependencyInfo(AssetDatabase.LoadAssetAtPath<UnityObject>(dependencies[i]));
+            new DependencyInfo(dependencies[i]);
         }
 
         // Add info for each object in project folder
@@ -57,7 +55,7 @@ public static partial class DependencyInfoHighlighter
             string localPath = paths[i].Replace(Application.dataPath, "Assets");
             if (Path.GetExtension(localPath) == ".meta")
                 continue;
-            new DependencyInfo(AssetDatabase.LoadAssetAtPath<UnityObject>(localPath));
+            new DependencyInfo(localPath);
         }
 
         Profiling.End("CheckDependencies");
