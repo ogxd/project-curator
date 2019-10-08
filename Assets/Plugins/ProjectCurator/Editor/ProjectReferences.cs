@@ -16,7 +16,7 @@ namespace Ogxd.DependencyHighlighter
 #if UNITY_EDITOR
                         UnityEditor.AssetDatabase.CreateAsset(instance, $"Assets/Resources/{typeof(T).Name}.asset");
 #else
-                    Debug.LogError($"There is no '{typeof(T).Name}' in your resources. Access {typeof(T).Name} class in the Editor to initialize it.");
+                        Debug.LogError($"There is no '{typeof(T).Name}' in your resources. Access {typeof(T).Name} class in the Editor to initialize it.");
 #endif
                     }
                 }
