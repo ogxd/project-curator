@@ -10,7 +10,7 @@ public class ProjectCuratorData {
     [SerializeField]
     private AssetInfo[] assetInfos;
     public static AssetInfo[] AssetInfos {
-        get => Instance.assetInfos;
+        get => Instance.assetInfos ?? (Instance.assetInfos = new AssetInfo[0]);
         set => Instance.assetInfos = value;
     }
 

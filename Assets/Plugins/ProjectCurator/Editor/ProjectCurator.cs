@@ -45,6 +45,8 @@ public static class ProjectCurator {
                 continue;
             assetInfo.dependencies.Add(dependency);
             pathToAssetInfo[dependency].referencers.Add(assetInfo.path);
+            // Included status may have changed and need to be recomputed
+            pathToAssetInfo[dependency].ClearIncludedStatus();
         }
     }
 
@@ -53,7 +55,9 @@ public static class ProjectCurator {
         if (pathToAssetInfo.TryGetValue(asset, out AssetInfo assetInfo)) {
             foreach (string referencer in assetInfo.referencers) {
                 if (pathToAssetInfo.TryGetValue(referencer, out AssetInfo referencerAssetInfo)) {
-                    if (!referencerAssetInfo.dependencies.Remove(asset)) {
+                    if (referencerAssetInfo.dependencies.Remove(asset)) {
+                        referencerAssetInfo.ClearIncludedStatus();
+                    } else {
                         // Non-Reciprocity Error
                         Debug.LogWarning($"Asset '{referencer}' that depends on '{asset}' doesn't have it as a dependency");
                     }
@@ -63,12 +67,13 @@ public static class ProjectCurator {
             }
             foreach (string dependency in assetInfo.dependencies) {
                 if (pathToAssetInfo.TryGetValue(dependency, out AssetInfo dependencyAssetInfo)) {
-                    if (!dependencyAssetInfo.referencers.Remove(asset)) {
+                    if (dependencyAssetInfo.referencers.Remove(asset)) {
+                        dependencyAssetInfo.ClearIncludedStatus();
+                    } else {
                         // Non-Reciprocity Error
                         Debug.LogWarning($"Asset '{dependency}' that is referenced by '{asset}' doesn't have it as a referencer");
                     }
-                }
-                else {
+                } else {
                     Debug.LogWarning($"Asset '{dependency}' that is referenced by '{asset}' is not present in the database");
                 }
             }

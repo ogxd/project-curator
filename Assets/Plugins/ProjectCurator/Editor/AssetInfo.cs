@@ -52,41 +52,27 @@ public class AssetInfo : ISerializationCallbackReceiver {
         return AssetDatabase.GetDependencies(path);
     }
 
+    public void ClearIncludedStatus()
+    {
+        includedStatus = IncludedInBuild.Unknown;
+    }
+
     [NonSerialized]
     private IncludedInBuild includedStatus;
 
     public IncludedInBuild IncludedStatus {
         get {
-            if (includedStatus == IncludedInBuild.Unknown) {
-                includedStatus = CheckIncludedStatus();
-            }
-            return includedStatus;
+            if (includedStatus != IncludedInBuild.Unknown)
+                return includedStatus;
+            // Avoid circular loops
+            includedStatus = IncludedInBuild.NotIncluded;
+            return includedStatus = CheckIncludedStatus();
         }
     }
 
     public bool IsIncludedInBuild => (int)IncludedStatus >= 10;
 
     private IncludedInBuild CheckIncludedStatus() {
-
-        //HashSet<AssetInfo> browsedReferencers = new HashSet<AssetInfo>();
-        //Stack<AssetInfo> deepReferencers = new Stack<AssetInfo>();
-        //deepReferencers.Push(this);
-        //AssetInfo current;
-        //while (deepReferencers.Count > 0) {
-        //    current = deepReferencers.Pop();
-        //    if (browsedReferencers.Add(current)) {
-        //        foreach (var referencer in current.referencers) {
-        //            deepReferencers.Push(ProjectCurator.GetAsset(referencer));
-        //        }
-        //    } else {
-        //        //Debug.Log($"Asset '{current.path}' was already browsed");
-        //    }
-        //}
-
-        if (includedStatus != IncludedInBuild.Unknown)
-            return includedStatus;
-
-        includedStatus = IncludedInBuild.NotIncluded;
 
         foreach (var referencer in referencers) {
             AssetInfo refInfo = ProjectCurator.GetAsset(referencer);
