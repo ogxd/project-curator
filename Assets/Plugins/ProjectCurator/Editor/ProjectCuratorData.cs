@@ -2,35 +2,39 @@
 using System.IO;
 using UnityEngine;
 
-[Serializable]
-public class ProjectCuratorData {
+namespace Nanolabo
+{
+    [Serializable]
+    public class ProjectCuratorData
+    {
 
-    private const string JSON_PATH = "ProjectSettings/ProjectCuratorSettings.json";
+        private const string JSON_PATH = "ProjectSettings/ProjectCuratorSettings.json";
 
-    [SerializeField]
-    private AssetInfo[] assetInfos;
-    public static AssetInfo[] AssetInfos {
-        get => Instance.assetInfos ?? (Instance.assetInfos = new AssetInfo[0]);
-        set => Instance.assetInfos = value;
-    }
-
-    private static ProjectCuratorData instance;
-    public static ProjectCuratorData Instance {
-        get {
-            if (instance == null) {
-                if (File.Exists(JSON_PATH)) {
-                    instance = JsonUtility.FromJson<ProjectCuratorData>(File.ReadAllText(JSON_PATH));
-                }
-                else {
-                    instance = new ProjectCuratorData();
-                    File.WriteAllText(JSON_PATH, JsonUtility.ToJson(instance));
-                }
-            }
-            return instance;
+        [SerializeField]
+        private AssetInfo[] assetInfos;
+        public static AssetInfo[] AssetInfos {
+            get => Instance.assetInfos ?? (Instance.assetInfos = new AssetInfo[0]);
+            set => Instance.assetInfos = value;
         }
-    }
 
-    public static void Save() {
-        File.WriteAllText(JSON_PATH, JsonUtility.ToJson(Instance));
+        private static ProjectCuratorData instance;
+        public static ProjectCuratorData Instance {
+            get {
+                if (instance == null) {
+                    if (File.Exists(JSON_PATH)) {
+                        instance = JsonUtility.FromJson<ProjectCuratorData>(File.ReadAllText(JSON_PATH));
+                    } else {
+                        instance = new ProjectCuratorData();
+                        File.WriteAllText(JSON_PATH, JsonUtility.ToJson(instance));
+                    }
+                }
+                return instance;
+            }
+        }
+
+        public static void Save()
+        {
+            File.WriteAllText(JSON_PATH, JsonUtility.ToJson(Instance));
+        }
     }
 }

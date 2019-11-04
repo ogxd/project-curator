@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Ogxd.DependencyHighlighter {
-
+namespace Nanolabo
+{
     [InitializeOnLoad]
     public static partial class ProjectWindowOverlay
     {
@@ -15,15 +15,10 @@ namespace Ogxd.DependencyHighlighter {
         private static void ProjectWindowItemOnGUI(string guid, Rect rect)
         {
             if (enabled) {
-
-                Rect r = new Rect(rect.width + rect.x - 20, rect.y + 1, 16, 16);
-
                 AssetInfo assetInfo = ProjectCurator.GetAsset(AssetDatabase.GUIDToAssetPath(guid));
                 if (assetInfo != null) {
-                    if (GUI.Button(r, assetInfo.IsIncludedInBuild ? ProjectIcons.LinkBlue : ProjectIcons.LinkBlack, GUIStyle.none)) {
-                        //Rect tooltipRect = new Rect(Event.current.mousePosition.x, Event.current.mousePosition.y, 100, 20);
-                        //PopupWindow.Show(tooltipRect, new DependencyInfoPopup(dependencyInfo));
-                    }
+                    var content = new GUIContent(assetInfo.IsIncludedInBuild ? ProjectIcons.LinkBlue : ProjectIcons.LinkBlack, assetInfo.IncludedStatus.ToString());
+                    GUI.Label(new Rect(rect.width + rect.x - 20, rect.y + 1, 16, 16), content);
                 } else {
 
                 }

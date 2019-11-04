@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Ogxd.DependencyHighlighter
+namespace Nanolabo
 {
     public class ProjectReferences<T> : ScriptableObject where T : ScriptableObject
     {

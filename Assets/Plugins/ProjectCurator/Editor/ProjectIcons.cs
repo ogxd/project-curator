@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace Ogxd.DependencyHighlighter
+namespace Nanolabo
 {
     public class ProjectIcons : ProjectReferences<ProjectIcons>
     {
@@ -18,5 +18,4 @@ namespace Ogxd.DependencyHighlighter
         private Texture2D linkBlue;
         public static Texture2D LinkBlue => Instance.linkBlue;
     }
-
 }
