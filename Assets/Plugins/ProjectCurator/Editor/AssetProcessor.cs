@@ -4,9 +4,11 @@ using System;
 
 namespace Nanolabo
 {
+    /// <summary>
+    /// The purpose of this class is to try detecting asset changes to automatically update the ProjectCurator database.
+    /// </summary>
     public class AssetProcessor : UnityEditor.AssetModificationProcessor
     {
-
         [InitializeOnLoadMethod]
         public static void Init()
         {
@@ -27,12 +29,13 @@ namespace Nanolabo
 
         static string[] OnWillSaveAssets(string[] paths)
         {
-            if (ProjectCurator.upToDate) {
+            if (ProjectCuratorData.IsUpToDate) {
                 Actions.Enqueue(() => {
                     foreach (string path in paths) {
                         ProjectCurator.RemoveAssetFromDatabase(path);
                         ProjectCurator.AddAssetToDatabase(path);
                     }
+                    ProjectCurator.SaveDatabase();
                 });
             }
             return paths;
@@ -40,27 +43,30 @@ namespace Nanolabo
 
         static void OnWillCreateAsset(string assetName)
         {
-            if (ProjectCurator.upToDate) {
+            if (ProjectCuratorData.IsUpToDate) {
                 Actions.Enqueue(() => {
                     ProjectCurator.AddAssetToDatabase(assetName);
+                    ProjectCurator.SaveDatabase();
                 });
             }
         }
 
         static AssetDeleteResult OnWillDeleteAsset(string assetName, RemoveAssetOptions removeAssetOptions)
         {
-            if (ProjectCurator.upToDate) {
+            if (ProjectCuratorData.IsUpToDate) {
                 ProjectCurator.RemoveAssetFromDatabase(assetName);
+                ProjectCurator.SaveDatabase();
             }
             return AssetDeleteResult.DidNotDelete;
         }
 
         static AssetMoveResult OnWillMoveAsset(string sourcePath, string destinationPath)
         {
-            if (ProjectCurator.upToDate) {
+            if (ProjectCuratorData.IsUpToDate) {
                 Actions.Enqueue(() => {
                     ProjectCurator.RemoveAssetFromDatabase(sourcePath);
                     ProjectCurator.AddAssetToDatabase(destinationPath);
+                    ProjectCurator.SaveDatabase();
                 });
             }
             return AssetMoveResult.DidNotMove;

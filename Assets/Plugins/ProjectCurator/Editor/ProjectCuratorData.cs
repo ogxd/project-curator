@@ -7,8 +7,11 @@ namespace Nanolabo
     [Serializable]
     public class ProjectCuratorData
     {
-
         private const string JSON_PATH = "ProjectSettings/ProjectCuratorSettings.json";
+
+        [SerializeField]
+        private bool isUpToDate = false;
+        public static bool IsUpToDate { get { return Instance.isUpToDate; } set { Instance.isUpToDate = value; } }
 
         [SerializeField]
         private AssetInfo[] assetInfos;

@@ -9,8 +9,6 @@ namespace Nanolabo
 {
     public static class ProjectCurator
     {
-        public static bool upToDate = false;
-
         [NonSerialized]
         private static Dictionary<string, AssetInfo> pathToAssetInfo;
 
@@ -32,7 +30,6 @@ namespace Nanolabo
 
         public static void AddAssetToDatabase(string path)
         {
-
             AssetInfo assetInfo;
             if (!pathToAssetInfo.TryGetValue(path, out assetInfo)) {
                 pathToAssetInfo.Add(path, assetInfo = new AssetInfo(path));
@@ -54,7 +51,6 @@ namespace Nanolabo
 
         public static void RemoveAssetFromDatabase(string asset)
         {
-
             if (pathToAssetInfo.TryGetValue(asset, out AssetInfo assetInfo)) {
                 foreach (string referencer in assetInfo.referencers) {
                     if (pathToAssetInfo.TryGetValue(referencer, out AssetInfo referencerAssetInfo)) {
@@ -122,7 +118,7 @@ namespace Nanolabo
 
             EditorUtility.ClearProgressBar();
 
-            upToDate = true;
+            ProjectCuratorData.IsUpToDate = true;
 
             SaveDatabase();
         }
