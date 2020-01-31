@@ -18,7 +18,7 @@ A convenient tool to cleanup and maintain your Unity projects !
 - When installed in Unity, click **Window > Project Curator** (and dock the window somewhere maybe)
 - Select an asset to visualize dependencies and referencers.
 
-> [!NOTE] You will need to Rebuild the database on the first run. There should be a button for it in the window (or do a right click on the window tab). The database should update automatically afterwards, even when assets are created, moved or deleted. Feel free to rebuild the database again if there is an issue.
+> You will need to Rebuild the database on the first run. There should be a button for it in the window (or do a right click on the window tab). The database should update automatically afterwards, even when assets are created, moved or deleted. Feel free to rebuild the database again if there is an issue.
 
 ## Statuses
 
@@ -44,4 +44,4 @@ Statuses can be :
     *The asset is referenced by at least one other asset that is included in the build  
     Example : A prefab that is in a built Scene*  
 
-> [!NOTE] The overlay icon in the project folder can be disabled. To do so, right click on the Project Curator window tab, and click "Project Overlay"
+> The overlay icon in the project folder can be disabled. To do so, right click on the Project Curator window tab, and click "Project Overlay"
