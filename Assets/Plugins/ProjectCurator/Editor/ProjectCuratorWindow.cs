@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace Nanolabo
 
         public ProjectCuratorWindow()
         {
-            UnityEditor.Selection.selectionChanged += OnSelectionChanged;
+            Selection.selectionChanged += OnSelectionChanged;
         }
 
         private void OnSelectionChanged()
@@ -36,7 +37,6 @@ namespace Nanolabo
 
         private void OnGUI()
         {
-
             string selectedPath = AssetDatabase.GetAssetPath(UnityEditor.Selection.activeObject);
             if (string.IsNullOrEmpty(selectedPath))
                 return;
@@ -51,11 +51,14 @@ namespace Nanolabo
             GUILayout.BeginVertical();
             GUILayout.Label(Path.GetFileName(selectedPath), TitleStyle);
             // Display directory (without "Assets/" prefix)
-            GUILayout.Label(Path.GetDirectoryName(selectedPath).Remove(0, 7));
+            GUILayout.Label(Regex.Match(Path.GetDirectoryName(selectedPath), "(\\\\.*)$").Value);
             rect = GUILayoutUtility.GetLastRect();
             GUILayout.EndVertical();
             GUILayout.Space(44);
             GUILayout.EndHorizontal();
+
+            if (Directory.Exists(selectedPath))
+                return;
 
             AssetInfo selectedAssetInfo = ProjectCurator.GetAsset(selectedPath);
             if (selectedAssetInfo == null) {
