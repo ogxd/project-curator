@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Nanolabo
+namespace Ogxd.ProjectCurator
 {
     public enum IncludedInBuild
     {

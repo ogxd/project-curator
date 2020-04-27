@@ -1,0 +1,8 @@
+{
+  "name": "com.ogxd.project-curator",
+  "version": "1.2.0",
+  "unity": "2018.3",
+  "displayName": "Project Curator",
+  "keywords": ["Project", "Curator", "Reference", "Editor", "Cleanup", "Dependencies", "Dependency"],
+  "description": "A convenient tool to help cleaning and maintaining Unity Projects"
+}

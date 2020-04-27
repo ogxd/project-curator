@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.IO;
 
-namespace Nanolabo
+namespace Ogxd.ProjectCurator
 {
     public static class ProjectCurator
     {

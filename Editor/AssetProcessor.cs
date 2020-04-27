@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Nanolabo
+namespace Ogxd.ProjectCurator
 {
     /// <summary>
     /// The purpose of this class is to try detecting asset changes to automatically update the ProjectCurator database.

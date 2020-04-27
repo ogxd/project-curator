@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Nanolabo
+namespace Ogxd.ProjectCurator
 {
     [InitializeOnLoad]
     public static partial class ProjectWindowOverlay

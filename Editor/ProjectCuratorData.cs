@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace Nanolabo
+namespace Ogxd.ProjectCurator
 {
     [Serializable]
     public class ProjectCuratorData

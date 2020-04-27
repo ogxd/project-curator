@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
-namespace Nanolabo
+namespace Ogxd.ProjectCurator
 {
     public class ProjectCuratorWindow : EditorWindow, IHasCustomMenu
     {
