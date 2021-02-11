@@ -34,6 +34,8 @@ namespace Ogxd.ProjectCurator
 
         private static GUIStyle itemStyle;
         private static GUIStyle ItemStyle => itemStyle ?? (itemStyle = new GUIStyle(EditorStyles.label) { margin = new RectOffset(32, 0, 0, 0) });
+        
+        private static bool showFullPath;
 
         private void OnGUI()
         {
@@ -77,7 +79,8 @@ namespace Ogxd.ProjectCurator
             dependenciesOpen = EditorGUILayout.Foldout(dependenciesOpen, $"Dependencies ({selectedAssetInfo.dependencies.Count})");
             if (dependenciesOpen) {
                 foreach (var dependency in selectedAssetInfo.dependencies) {
-                    if (GUILayout.Button(Path.GetFileName(dependency), ItemStyle)) {
+                    var showPath = showFullPath ? dependency : Path.GetFileName(dependency); 
+                    if (GUILayout.Button(showPath, ItemStyle)) {
                         UnityEditor.Selection.activeObject = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(dependency);
                     }
                     rect = GUILayoutUtility.GetLastRect();
@@ -93,7 +96,8 @@ namespace Ogxd.ProjectCurator
             referencesOpen = EditorGUILayout.Foldout(referencesOpen, $"Referencers ({selectedAssetInfo.referencers.Count})");
             if (referencesOpen) {
                 foreach (var referencer in selectedAssetInfo.referencers) {
-                    if (GUILayout.Button(Path.GetFileName(referencer), ItemStyle)) {
+                    var showPath = showFullPath ? referencer : Path.GetFileName(referencer) ; 
+                    if (GUILayout.Button(showPath, ItemStyle)) {
                         UnityEditor.Selection.activeObject = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(referencer);
                     }
                     rect = GUILayoutUtility.GetLastRect();
@@ -123,6 +127,7 @@ namespace Ogxd.ProjectCurator
             menu.AddItem(new GUIContent("Rebuild Database"), false, ProjectCurator.RebuildDatabase);
             menu.AddItem(new GUIContent("Clear Database"), false, ProjectCurator.ClearDatabase);
             menu.AddItem(new GUIContent("Project Overlay"), ProjectWindowOverlay.Enabled, () => { ProjectWindowOverlay.Enabled = !ProjectWindowOverlay.Enabled; });
+            menu.AddItem(new GUIContent("Show Full Path"), showFullPath, () => { showFullPath = !showFullPath; });
         }
 
         public bool HelpBoxWithButton(GUIContent messageContent, GUIContent buttonContent)
