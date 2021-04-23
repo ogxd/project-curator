@@ -62,10 +62,19 @@ namespace Ogxd.ProjectCurator
 
             AssetInfo selectedAssetInfo = ProjectCurator.GetAsset(selectedPath);
             if (selectedAssetInfo == null) {
-                bool rebuildClicked = HelpBoxWithButton(new GUIContent("You must rebuild database to obtain information on this asset", EditorGUIUtility.IconContent("console.warnicon").image), new GUIContent("Rebuild Database"));
-                if (rebuildClicked) {
-                    ProjectCurator.RebuildDatabase();
+                if (selectedPath.StartsWith("Assets"))
+                {
+                    bool rebuildClicked = HelpBoxWithButton(new GUIContent("You must rebuild database to obtain information on this asset", EditorGUIUtility.IconContent("console.warnicon").image), new GUIContent("Rebuild Database"));
+                    if (rebuildClicked)
+                    {
+                        ProjectCurator.RebuildDatabase();
+                    }
+                } 
+                else
+                {
+                    EditorGUILayout.HelpBox("Project Curator ignores assets that are not in the Asset folder.", MessageType.Warning);
                 }
+
                 return;
             }
 
