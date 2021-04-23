@@ -62,10 +62,19 @@ namespace Ogxd.ProjectCurator
 
             AssetInfo selectedAssetInfo = ProjectCurator.GetAsset(selectedPath);
             if (selectedAssetInfo == null) {
-                bool rebuildClicked = HelpBoxWithButton(new GUIContent("You must rebuild database to obtain information on this asset", EditorGUIUtility.IconContent("console.warnicon").image), new GUIContent("Rebuild Database"));
-                if (rebuildClicked) {
-                    ProjectCurator.RebuildDatabase();
+                if (selectedPath.StartsWith("Assets"))
+                {
+                    bool rebuildClicked = HelpBoxWithButton(new GUIContent("You must rebuild database to obtain information on this asset", EditorGUIUtility.IconContent("console.warnicon").image), new GUIContent("Rebuild Database"));
+                    if (rebuildClicked)
+                    {
+                        ProjectCurator.RebuildDatabase();
+                    }
+                } 
+                else
+                {
+                    EditorGUILayout.HelpBox("Project Curator ignores assets that are not in the Asset folder.", MessageType.Warning);
                 }
+
                 return;
             }
 
@@ -77,7 +86,7 @@ namespace Ogxd.ProjectCurator
             dependenciesOpen = EditorGUILayout.Foldout(dependenciesOpen, $"Dependencies ({selectedAssetInfo.dependencies.Count})");
             if (dependenciesOpen) {
                 foreach (var dependency in selectedAssetInfo.dependencies) {
-                    if (GUILayout.Button(Path.GetFileName(dependency), ItemStyle)) {
+                    if (GUILayout.Button(new GUIContent(Path.GetFileName(dependency), dependency), ItemStyle)) {
                         UnityEditor.Selection.activeObject = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(dependency);
                     }
                     rect = GUILayoutUtility.GetLastRect();
@@ -93,7 +102,7 @@ namespace Ogxd.ProjectCurator
             referencesOpen = EditorGUILayout.Foldout(referencesOpen, $"Referencers ({selectedAssetInfo.referencers.Count})");
             if (referencesOpen) {
                 foreach (var referencer in selectedAssetInfo.referencers) {
-                    if (GUILayout.Button(Path.GetFileName(referencer), ItemStyle)) {
+                    if (GUILayout.Button(new GUIContent(Path.GetFileName(referencer), referencer), ItemStyle)) {
                         UnityEditor.Selection.activeObject = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(referencer);
                     }
                     rect = GUILayoutUtility.GetLastRect();
