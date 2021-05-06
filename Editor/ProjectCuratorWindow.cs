@@ -89,7 +89,7 @@ namespace Ogxd.ProjectCurator
             if (dependenciesOpen) {
                 foreach (var dependency in selectedAssetInfo.dependencies) {
                     var showPath = showFullPath ? dependency : Path.GetFileName(dependency); 
-                    if (GUILayout.Button(new GUIContent(Path.GetFileName(dependency), showPath), ItemStyle)) {
+                    if (GUILayout.Button(new GUIContent(showPath, dependency), ItemStyle)) {
                         UnityEditor.Selection.activeObject = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(dependency);
                     }
                     rect = GUILayoutUtility.GetLastRect();
@@ -106,7 +106,7 @@ namespace Ogxd.ProjectCurator
             if (referencesOpen) {
                 foreach (var referencer in selectedAssetInfo.referencers) {
                     var showPath = showFullPath ? referencer : Path.GetFileName(referencer); 
-                    if (GUILayout.Button(new GUIContent(Path.GetFileName(referencer), showPath), ItemStyle)) {
+                    if (GUILayout.Button(new GUIContent(showPath, referencer), ItemStyle)) {
                         UnityEditor.Selection.activeObject = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(referencer);
                     }
                     rect = GUILayoutUtility.GetLastRect();
