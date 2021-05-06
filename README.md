@@ -15,8 +15,8 @@ A convenient tool to cleanup and maintain your Unity projects !
 
 ## How to use ?
 - Install package
-  - Using Git : In Unity, click **Window > Package Manager > + > Add package from git URL...** and add `git@github.com:ogxd/project-curator.git`
-  - Manually : Download the .zip, unzip and in Unity click **Window > Package Manager > + > Add package from disck...** and select the downloaded `package.json`
+  - Using Git : In Unity, click **Window > Package Manager > + > Add package from git URL...** and add `https://github.com/ogxd/project-curator.git`
+  - Manually : Download the .zip, unzip and in Unity click **Window > Package Manager > + > Add package from disk...** and select the downloaded `package.json`
   - ~~With Unitypackage : Download the .unitypackage in the release tab.~~ *Not available anymore since version 1.2*
 - When installed in Unity, click **Window > Project Curator** (and dock the window somewhere maybe)
 - Select an asset to visualize dependencies and referencers.
