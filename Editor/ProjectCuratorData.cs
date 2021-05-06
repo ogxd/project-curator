@@ -37,6 +37,7 @@ namespace Ogxd.ProjectCurator
 
         public static void Save()
         {
+            File.SetAttributes(JSON_PATH, FileAttributes.Normal);
             File.WriteAllText(JSON_PATH, JsonUtility.ToJson(Instance));
         }
     }
