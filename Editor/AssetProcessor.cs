@@ -20,8 +20,11 @@ namespace Ogxd.ProjectCurator
         /// </summary>
         private static void OnUpdate()
         {
-            while (Actions.Count > 0) {
-                Actions.Dequeue()?.Invoke();
+            if (Actions.Count > 0) {
+                while (Actions.Count > 0) {
+                    Actions.Dequeue()?.Invoke();
+                }
+                ProjectCurator.SaveDatabase();
             }
         }
 
@@ -35,7 +38,6 @@ namespace Ogxd.ProjectCurator
                         var removedAsset = ProjectCurator.RemoveAssetFromDatabase(path);
                         ProjectCurator.AddAssetToDatabase(path, removedAsset?.referencers);
                     }
-                    ProjectCurator.SaveDatabase();
                 });
             }
             return paths;
@@ -46,7 +48,6 @@ namespace Ogxd.ProjectCurator
             if (ProjectCuratorData.IsUpToDate) {
                 Actions.Enqueue(() => {
                     ProjectCurator.AddAssetToDatabase(assetName);
-                    ProjectCurator.SaveDatabase();
                 });
             }
         }
@@ -54,8 +55,9 @@ namespace Ogxd.ProjectCurator
         static AssetDeleteResult OnWillDeleteAsset(string assetName, RemoveAssetOptions removeAssetOptions)
         {
             if (ProjectCuratorData.IsUpToDate) {
-                ProjectCurator.RemoveAssetFromDatabase(assetName);
-                ProjectCurator.SaveDatabase();
+                Actions.Enqueue(() => {
+                    ProjectCurator.RemoveAssetFromDatabase(assetName);
+                });
             }
             return AssetDeleteResult.DidNotDelete;
         }
@@ -66,7 +68,6 @@ namespace Ogxd.ProjectCurator
                 Actions.Enqueue(() => {
                     ProjectCurator.RemoveAssetFromDatabase(sourcePath);
                     ProjectCurator.AddAssetToDatabase(destinationPath);
-                    ProjectCurator.SaveDatabase();
                 });
             }
             return AssetMoveResult.DidNotMove;
