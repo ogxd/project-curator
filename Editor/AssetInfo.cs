@@ -57,7 +57,7 @@ namespace Ogxd.ProjectCurator
 
         public string[] GetDependencies()
         {
-            return AssetDatabase.GetDependencies(path);
+            return AssetDatabase.GetDependencies(path, recursive: false);
         }
 
         public void ClearIncludedStatus()
