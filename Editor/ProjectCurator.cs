@@ -28,7 +28,7 @@ namespace Ogxd.ProjectCurator
             return assetInfo;
         }
 
-        public static void AddAssetToDatabase(string path)
+        public static AssetInfo AddAssetToDatabase(string path, HashSet<string> referencers = null)
         {
             AssetInfo assetInfo;
             if (!pathToAssetInfo.TryGetValue(path, out assetInfo)) {
@@ -47,9 +47,14 @@ namespace Ogxd.ProjectCurator
                     depInfo.ClearIncludedStatus();
                 }
             }
+
+            if (referencers != null)
+                assetInfo.referencers = referencers;
+
+            return assetInfo;
         }
 
-        public static void RemoveAssetFromDatabase(string asset)
+        public static AssetInfo RemoveAssetFromDatabase(string asset)
         {
             if (pathToAssetInfo.TryGetValue(asset, out AssetInfo assetInfo)) {
                 foreach (string referencer in assetInfo.referencers) {
@@ -80,6 +85,8 @@ namespace Ogxd.ProjectCurator
             } else {
                 Debug.LogWarning($"Asset '{asset}' is not present in the database");
             }
+
+            return assetInfo;
         }
 
         public static void ClearDatabase()
