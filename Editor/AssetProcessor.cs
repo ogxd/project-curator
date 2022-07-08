@@ -32,8 +32,8 @@ namespace Ogxd.ProjectCurator
             if (ProjectCuratorData.IsUpToDate) {
                 Actions.Enqueue(() => {
                     foreach (string path in paths) {
-                        ProjectCurator.RemoveAssetFromDatabase(path);
-                        ProjectCurator.AddAssetToDatabase(path);
+                        var removedAsset = ProjectCurator.RemoveAssetFromDatabase(path);
+                        ProjectCurator.AddAssetToDatabase(path, removedAsset?.referencers);
                     }
                     ProjectCurator.SaveDatabase();
                 });
