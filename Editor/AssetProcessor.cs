@@ -35,28 +35,31 @@ namespace Ogxd.ProjectCurator
             if (ProjectCuratorData.IsUpToDate) {
                 Actions.Enqueue(() => {
                     foreach (string path in paths) {
-                        var removedAsset = ProjectCurator.RemoveAssetFromDatabase(path);
-                        ProjectCurator.AddAssetToDatabase(path, removedAsset?.referencers);
+                        var guid = AssetDatabase.AssetPathToGUID(path);
+                        var removedAsset = ProjectCurator.RemoveAssetFromDatabase(guid);
+                        ProjectCurator.AddAssetToDatabase(guid, removedAsset?.referencers);
                     }
                 });
             }
             return paths;
         }
 
-        static void OnWillCreateAsset(string assetName)
+        static void OnWillCreateAsset(string assetPath)
         {
             if (ProjectCuratorData.IsUpToDate) {
+                var guid = AssetDatabase.AssetPathToGUID(assetPath);
                 Actions.Enqueue(() => {
-                    ProjectCurator.AddAssetToDatabase(assetName);
+                    ProjectCurator.AddAssetToDatabase(guid);
                 });
             }
         }
 
-        static AssetDeleteResult OnWillDeleteAsset(string assetName, RemoveAssetOptions removeAssetOptions)
+        static AssetDeleteResult OnWillDeleteAsset(string assetPath, RemoveAssetOptions removeAssetOptions)
         {
             if (ProjectCuratorData.IsUpToDate) {
+                var guid = AssetDatabase.AssetPathToGUID(assetPath);
                 Actions.Enqueue(() => {
-                    ProjectCurator.RemoveAssetFromDatabase(assetName);
+                    ProjectCurator.RemoveAssetFromDatabase(guid);
                 });
             }
             return AssetDeleteResult.DidNotDelete;
@@ -64,12 +67,6 @@ namespace Ogxd.ProjectCurator
 
         static AssetMoveResult OnWillMoveAsset(string sourcePath, string destinationPath)
         {
-            if (ProjectCuratorData.IsUpToDate) {
-                Actions.Enqueue(() => {
-                    ProjectCurator.RemoveAssetFromDatabase(sourcePath);
-                    ProjectCurator.AddAssetToDatabase(destinationPath);
-                });
-            }
             return AssetMoveResult.DidNotMove;
         }
     }
