@@ -47,9 +47,11 @@ namespace Ogxd.ProjectCurator
         static void OnWillCreateAsset(string assetPath)
         {
             if (ProjectCuratorData.IsUpToDate) {
-                var guid = AssetDatabase.AssetPathToGUID(assetPath);
                 Actions.Enqueue(() => {
-                    ProjectCurator.AddAssetToDatabase(guid);
+                    var guid = AssetDatabase.AssetPathToGUID(assetPath);
+                    if (guid != string.Empty) {
+                        ProjectCurator.AddAssetToDatabase(guid);
+                    }
                 });
             }
         }
@@ -58,9 +60,9 @@ namespace Ogxd.ProjectCurator
         {
             if (ProjectCuratorData.IsUpToDate) {
                 var guid = AssetDatabase.AssetPathToGUID(assetPath);
-                Actions.Enqueue(() => {
+                if (guid != string.Empty) {
                     ProjectCurator.RemoveAssetFromDatabase(guid);
-                });
+                }
             }
             return AssetDeleteResult.DidNotDelete;
         }

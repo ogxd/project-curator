@@ -33,6 +33,8 @@ namespace Ogxd.ProjectCurator
 
         public static AssetInfo AddAssetToDatabase(string guid, HashSet<string> referencers = null)
         {
+            AssertGuidValid(guid);
+
             AssetInfo assetInfo;
             if (!guidToAssetInfo.TryGetValue(guid, out assetInfo)) {
                 guidToAssetInfo.Add(guid, assetInfo = new AssetInfo(guid));
@@ -60,6 +62,8 @@ namespace Ogxd.ProjectCurator
 
         public static AssetInfo RemoveAssetFromDatabase(string guid)
         {
+            AssertGuidValid(guid);
+
             if (guidToAssetInfo.TryGetValue(guid, out AssetInfo assetInfo)) {
                 foreach (string referencer in assetInfo.referencers) {
                     if (guidToAssetInfo.TryGetValue(referencer, out AssetInfo referencerAssetInfo)) {
@@ -152,6 +156,12 @@ namespace Ogxd.ProjectCurator
             }
             ProjectCuratorData.AssetInfos = assetInfos;
             ProjectCuratorData.Save();
+        }
+
+        static void AssertGuidValid(string guid) {
+            if (string.IsNullOrEmpty(guid)) {
+                throw new ArgumentException("GUID required", nameof(guid));
+            }
         }
     }
 }
