@@ -71,10 +71,10 @@ namespace Ogxd.ProjectCurator
                             referencerAssetInfo.ClearIncludedStatus();
                         } else {
                             // Non-Reciprocity Error
-                            Debug.LogWarning($"Asset '{FormatGuid(referencer)}' that depends on '{FormatGuid(guid)}' doesn't have it as a dependency");
+                            Warn($"Asset '{FormatGuid(referencer)}' that depends on '{FormatGuid(guid)}' doesn't have it as a dependency");
                         }
                     } else {
-                        Debug.LogWarning($"Asset '{FormatGuid(referencer)}' that depends on '{FormatGuid(guid)}' is not present in the database");
+                        Warn($"Asset '{FormatGuid(referencer)}' that depends on '{FormatGuid(guid)}' is not present in the database");
                     }
                 }
                 foreach (string dependency in assetInfo.dependencies) {
@@ -83,15 +83,15 @@ namespace Ogxd.ProjectCurator
                             dependencyAssetInfo.ClearIncludedStatus();
                         } else {
                             // Non-Reciprocity Error
-                            Debug.LogWarning($"Asset '{FormatGuid(dependency)}' that is referenced by '{FormatGuid(guid)}' doesn't have it as a referencer");
+                            Warn($"Asset '{FormatGuid(dependency)}' that is referenced by '{FormatGuid(guid)}' doesn't have it as a referencer");
                         }
                     } else {
-                        Debug.LogWarning($"Asset '{FormatGuid(dependency)}' that is referenced by '{FormatGuid(guid)}' is not present in the database");
+                        Warn($"Asset '{FormatGuid(dependency)}' that is referenced by '{FormatGuid(guid)}' is not present in the database");
                     }
                 }
                 guidToAssetInfo.Remove(guid);
             } else {
-                Debug.LogWarning($"Asset '{FormatGuid(guid)}' is not present in the database");
+                Warn($"Asset '{FormatGuid(guid)}' is not present in the database");
             }
 
             return assetInfo;
@@ -156,6 +156,11 @@ namespace Ogxd.ProjectCurator
             }
             ProjectCuratorData.AssetInfos = assetInfos;
             ProjectCuratorData.Save();
+        }
+
+        static void Warn(string message)
+        {
+            Debug.LogWarning("ProjectCurator: " + message);
         }
 
         static string FormatGuid(string guid)
