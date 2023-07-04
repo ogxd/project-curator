@@ -71,10 +71,10 @@ namespace Ogxd.ProjectCurator
                             referencerAssetInfo.ClearIncludedStatus();
                         } else {
                             // Non-Reciprocity Error
-                            Debug.LogWarning($"Asset '{referencer}' that depends on '{guid}' doesn't have it as a dependency");
+                            Debug.LogWarning($"Asset '{FormatGuid(referencer)}' that depends on '{FormatGuid(guid)}' doesn't have it as a dependency");
                         }
                     } else {
-                        Debug.LogWarning($"Asset '{referencer}' that depends on '{guid}' is not present in the database");
+                        Debug.LogWarning($"Asset '{FormatGuid(referencer)}' that depends on '{FormatGuid(guid)}' is not present in the database");
                     }
                 }
                 foreach (string dependency in assetInfo.dependencies) {
@@ -83,15 +83,15 @@ namespace Ogxd.ProjectCurator
                             dependencyAssetInfo.ClearIncludedStatus();
                         } else {
                             // Non-Reciprocity Error
-                            Debug.LogWarning($"Asset '{dependency}' that is referenced by '{guid}' doesn't have it as a referencer");
+                            Debug.LogWarning($"Asset '{FormatGuid(dependency)}' that is referenced by '{FormatGuid(guid)}' doesn't have it as a referencer");
                         }
                     } else {
-                        Debug.LogWarning($"Asset '{dependency}' that is referenced by '{guid}' is not present in the database");
+                        Debug.LogWarning($"Asset '{FormatGuid(dependency)}' that is referenced by '{FormatGuid(guid)}' is not present in the database");
                     }
                 }
                 guidToAssetInfo.Remove(guid);
             } else {
-                Debug.LogWarning($"Asset '{guid}' is not present in the database");
+                Debug.LogWarning($"Asset '{FormatGuid(guid)}' is not present in the database");
             }
 
             return assetInfo;
@@ -158,7 +158,16 @@ namespace Ogxd.ProjectCurator
             ProjectCuratorData.Save();
         }
 
-        static void AssertGuidValid(string guid) {
+        static string FormatGuid(string guid)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            return string.IsNullOrEmpty(path)
+                ? $"(Missing asset with GUID={guid})"
+                : path;
+        }
+
+        static void AssertGuidValid(string guid)
+        {
             if (string.IsNullOrEmpty(guid)) {
                 throw new ArgumentException("GUID required", nameof(guid));
             }
