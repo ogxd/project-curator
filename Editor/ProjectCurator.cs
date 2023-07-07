@@ -40,13 +40,15 @@ namespace Ogxd.ProjectCurator
                 guidToAssetInfo.Add(guid, assetInfo = new AssetInfo(guid));
             }
 
-            var dependencyPaths = assetInfo.GetDependencies();
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var dependencyPaths = AssetDatabase.GetDependencies(path, recursive: false);
 
             foreach (string dependencyPath in dependencyPaths) {
                 var dependencyGuid = AssetDatabase.AssetPathToGUID(dependencyPath);
-                if (dependencyGuid == assetInfo.guid)
-                    continue;
-                if (guidToAssetInfo.TryGetValue(dependencyGuid, out AssetInfo depInfo)) {
+                if (
+                    dependencyGuid != assetInfo.guid &&
+                    guidToAssetInfo.TryGetValue(dependencyGuid, out AssetInfo depInfo)
+                ) {
                     assetInfo.dependencies.Add(dependencyGuid);
                     depInfo.referencers.Add(assetInfo.guid);
                     // Included status may have changed and need to be recomputed

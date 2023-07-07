@@ -55,12 +55,6 @@ namespace Ogxd.ProjectCurator
             this.guid = guid;
         }
 
-        public string[] GetDependencies()
-        {
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            return AssetDatabase.GetDependencies(path, recursive: false);
-        }
-
         public void ClearIncludedStatus()
         {
             includedStatus = IncludedInBuild.Unknown;
